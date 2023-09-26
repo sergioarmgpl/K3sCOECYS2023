@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: led-app
+  name: led-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: led-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: led-app
+    spec:
+      containers:
+      - image: sergioarmgpl/leds
+        name: leds
+        imagePullPolicy: Always
+        env:
+        - name: COLOR
+          value: "OFF"
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["SYS_ADMIN"]
+        volumeMounts:
+        - mountPath: /dev
+          name: dev-volume
+      volumes:
+      - name: dev-volume
+        hostPath:
+          path: /dev
+          type: Directory
+status: {} 
